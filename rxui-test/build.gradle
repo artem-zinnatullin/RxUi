@@ -21,8 +21,7 @@ android {
 }
 
 dependencies {
-    compile libraries.rxJava
-    compile libraries.rxAndroid
+    compile libraries.rxUi
 
     testCompile libraries.junit
     testCompile libraries.assertJ

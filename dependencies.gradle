@@ -1,29 +1,31 @@
 ext.versions = [
-        targetJava    : '1.6',
+        targetJava : '1.6',
 
-        compileSdk    : 23,
-        minSdk        : 14,
-        buildTools    : '23.0.3',
+        compileSdk : 23,
+        minSdk     : 14,
+        buildTools : '23.0.3',
 
-        rxJava        : '1.1.5',
-        rxAndroid     : '1.2.0',
+        rxJava     : '1.1.5',
+        rxAndroid  : '1.2.0',
 
         // Test dependencies.
 
-        junit         : '4.12',
-        assertJ       : '1.7.1',
-        mockito       : '1.10.19',
-        equalsVerifier: '1.7.5',
+        junit      : '4.12',
+        assertJ    : '1.7.1',
+        mockito    : '1.10.19',
+        robolectric: '3.0',
 ]
 
 ext.libraries = [
-        rxJava        : "io.reactivex:rxjava:$versions.rxJava",
-        rxAndroid     : "io.reactivex:rxandroid:$versions.rxAndroid",
+        rxUi       : project(':rxui'),
+
+        rxJava     : "io.reactivex:rxjava:$versions.rxJava",
+        rxAndroid  : "io.reactivex:rxandroid:$versions.rxAndroid",
 
         // Test dependencies.
 
-        junit         : "junit:junit:$versions.junit",
-        assertJ       : "org.assertj:assertj-core:$versions.assertJ",
-        mockitoCore   : "org.mockito:mockito-core:$versions.mockito",
-        equalsVerifier: "nl.jqno.equalsverifier:equalsverifier:$versions.equalsVerifier",
+        junit      : "junit:junit:$versions.junit",
+        assertJ    : "org.assertj:assertj-core:$versions.assertJ",
+        mockitoCore: "org.mockito:mockito-core:$versions.mockito",
+        robolectric: "org.robolectric:robolectric:$versions.robolectric",
 ]

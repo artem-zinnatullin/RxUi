@@ -1,1 +1,2 @@
 include ':rxui'
+include ':rxui-test'
