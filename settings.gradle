@@ -1,4 +1,5 @@
 include ':rxui'
+include ':rxui-kotlin'
 include ':rxui-test'
 
 include ':rxui-sample-java'

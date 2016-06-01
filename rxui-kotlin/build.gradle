@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        versionName VERSION_NAME
+        versionCode Integer.parseInt(VERSION_CODE)
+        minSdkVersion versions.minSdk
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt' // multiple libs have this file -> cause build error
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        // AssertJ references java.nio package, which is not available on Android
+    }
+
+    // It's not required, you can place Kotlin files to src/…/java but I just think it looks better in src/…/kotlin.
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+}
+
+dependencies {
+    compile libraries.rxUi
+    compile libraries.kotlinStd
+
+    testCompile libraries.junit
+    testCompile libraries.assertJ
+    testCompile libraries.mockitoCore
+    testCompile libraries.robolectric
+}
+
+apply from: '../gradle/publish-android-lib.gradle'
+repositories {
+    mavenCentral()
+}
