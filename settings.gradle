@@ -1,2 +1,4 @@
 include ':rxui'
 include ':rxui-test'
+
+include ':rxui-sample-java'

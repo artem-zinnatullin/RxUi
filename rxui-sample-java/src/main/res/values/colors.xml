@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Thanks http://materialpalette.com -->
+    <color name="primary">#009688</color>
+    <color name="primary_dark">#00796B</color>
+    <color name="accent">#4CAF50</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#727272</color>
+</resources>

@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        applicationId 'com.artemzin.rxui.sample.java'
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        sample {
+            storeFile file('../keystore.jks')
+            storePassword 'sample'
+            keyAlias 'sample'
+            keyPassword 'sample'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.sample
+        }
+
+        release {
+            signingConfig signingConfigs.sample
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt' // multiple libs have this file -> cause build error
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile libraries.rxJava
+    compile libraries.rxAndroid
+    compile libraries.rxUi
+    compile libraries.rxBinding
+
+    compile libraries.supportAppCompat
+    compile libraries.javaTuples
+
+    testCompile libraries.junit
+    testCompile libraries.assertJ
+    testCompile libraries.mockitoCore
+    testCompile libraries.rxUiTest
+}
