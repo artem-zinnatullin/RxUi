@@ -5,8 +5,14 @@ ext.versions = [
         minSdk     : 14,
         buildTools : '23.0.3',
 
+        // Core dependencies.
         rxJava     : '1.1.5',
         rxAndroid  : '1.2.0',
+
+        // Sample app dependencies.
+        supportLibs: '23.4.0',
+        rxBinding  : '0.4.0',
+        javaTuples : '1.2',
 
         // Test dependencies.
 
@@ -17,15 +23,22 @@ ext.versions = [
 ]
 
 ext.libraries = [
-        rxUi       : project(':rxui'),
+        rxUi            : project(':rxui'),
+        rxUiTest        : project(':rxui-test'),
 
-        rxJava     : "io.reactivex:rxjava:$versions.rxJava",
-        rxAndroid  : "io.reactivex:rxandroid:$versions.rxAndroid",
+        // Core dependencies.
+        rxJava          : "io.reactivex:rxjava:$versions.rxJava",
+        rxAndroid       : "io.reactivex:rxandroid:$versions.rxAndroid",
+
+        // Sample app dependencies.
+        supportAppCompat: "com.android.support:appcompat-v7:$versions.supportLibs",
+        rxBinding       : "com.jakewharton.rxbinding:rxbinding:$versions.rxBinding",
+        javaTuples      : "org.javatuples:javatuples:$versions.javaTuples",
 
         // Test dependencies.
 
-        junit      : "junit:junit:$versions.junit",
-        assertJ    : "org.assertj:assertj-core:$versions.assertJ",
-        mockitoCore: "org.mockito:mockito-core:$versions.mockito",
-        robolectric: "org.robolectric:robolectric:$versions.robolectric",
+        junit           : "junit:junit:$versions.junit",
+        assertJ         : "org.assertj:assertj-core:$versions.assertJ",
+        mockitoCore     : "org.mockito:mockito-core:$versions.mockito",
+        robolectric     : "org.robolectric:robolectric:$versions.robolectric",
 ]
