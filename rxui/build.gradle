@@ -1,0 +1,32 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        versionName VERSION_NAME
+        versionCode Integer.parseInt(VERSION_CODE)
+        minSdkVersion versions.minSdk
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt' // multiple libs have this file -> cause build error
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        // AssertJ references java.nio package, which is not available on Android
+    }
+}
+
+dependencies {
+    compile libraries.rxJava
+    compile libraries.rxAndroid
+
+    testCompile libraries.junit
+    testCompile libraries.assertJ
+    testCompile libraries.mockitoCore
+}
+
+apply from: '../gradle/publish-android-lib.gradle'
