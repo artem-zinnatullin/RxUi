@@ -67,4 +67,8 @@ Only one extension function at the moment: `Observable.bind()`, absolutely same 
 compile 'com.artemzin.rxui:rxui-kotlin:1.0.0'
 ```
 
-Made with :heart: by [Artem Zinnatullin](https://twitter.com/artem_zin), discussed with [Juno Android Team](https://gojuno.com) and [@FE_Hudl](https://twitter.com/FE_Hudl).
+&nbsp;
+
+---
+
+<font size="3">Made with :heart: by [Artem Zinnatullin](https://twitter.com/artem_zin), discussed with [Juno Android Team](https://gojuno.com) and [@FE_Hudl](https://twitter.com/FE_Hudl).</font>
