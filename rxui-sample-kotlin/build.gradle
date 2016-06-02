@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        applicationId 'com.artemzin.rxui.sample.kotlin'
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        sample {
+            storeFile file('../keystore.jks')
+            storePassword 'sample'
+            keyAlias 'sample'
+            keyPassword 'sample'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.sample
+        }
+
+        release {
+            signingConfig signingConfigs.sample
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning', 'UnusedResources' // Lint still does not detect usage of resources from Kotlin code.
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt' // multiple libs have this file -> cause build error
+    }
+
+    // It's not required, you can place Kotlin files to src/…/java but I just think it looks better in src/…/kotlin.
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+}
+
+dependencies {
+    compile libraries.kotlinStd
+
+    compile libraries.rxJava
+    compile libraries.rxAndroid
+    compile libraries.rxUiKotlin
+    compile libraries.rxUi
+    compile libraries.rxBindingKotlin
+
+    compile libraries.supportAppCompat
+
+    testCompile libraries.junit
+    testCompile libraries.assertJ
+    testCompile libraries.mockitoCore
+    testCompile libraries.rxUiTest
+}

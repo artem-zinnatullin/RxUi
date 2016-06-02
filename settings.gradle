@@ -3,3 +3,4 @@ include ':rxui-kotlin'
 include ':rxui-test'
 
 include ':rxui-sample-java'
+include ':rxui-sample-kotlin'
