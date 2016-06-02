@@ -1,4 +1,4 @@
-### RxUi
+### RxUi: Observable <-> Observable
 
 Minimal implementation of [the concept of talking to Android View layer in a Reactive way described here](http://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/).
 
