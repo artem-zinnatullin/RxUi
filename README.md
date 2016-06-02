@@ -12,7 +12,9 @@ Minimal implementation of [the concept of talking to Android View layer in a Rea
 
 ###Sample Apps
 
-Check [Sample app written in Java](rxui-sample-java/src/main/java/com/artemzin/rxui/sample/java) and [Sample app written in Kotlin](rxui-sample-kotlin/src/main/kotlin/com/artemzin/rxui/sample/kotlin). Usages of RxUi are so tiny that you may not even see it at the first sight!
+Check [Sample app written in Java](rxui-sample-java/src/main/java/com/artemzin/rxui/sample/java) and [Sample app written in Kotlin](rxui-sample-kotlin/src/main/kotlin/com/artemzin/rxui/sample/kotlin). 
+
+>RxUi is so tiny that you may not even see it in the code at the first sight!
 
 ---
 
@@ -64,3 +66,5 @@ Only one extension function at the moment: `Observable.bind()`, absolutely same 
 ```groovy
 compile 'com.artemzin.rxui:rxui-kotlin:1.0.0'
 ```
+
+Made with :heart: by [Artem Zinnatullin](https://twitter.com/artem_zin), discussed with [Juno Android Team](https://gojuno.com) and [@FE_Hudl](https://twitter.com/FE_Hudl).
