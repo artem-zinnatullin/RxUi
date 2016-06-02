@@ -1,6 +1,6 @@
 ### RxUi
 
-Minimal implementation of [the concept described here](http://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/).
+Minimal implementation of [the concept of talking to Android View layer in a Reactive way described here](http://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/).
 
 #####RxUi [solves 3 main problems of communication](http://a.com) between Presenters/ViewModels/etc and View layer in Android applications:
 
@@ -10,14 +10,13 @@ Minimal implementation of [the concept described here](http://artemzin.com/blog/
 
 ---
 
-&nbsp;
 ###Sample Apps
 
 Check [Sample app written in Java](rxui-sample-java/src/main/java/com/artemzin/rxui/sample/java) and [Sample app written in Kotlin](rxui-sample-kotlin/src/main/kotlin/com/artemzin/rxui/sample/kotlin). Usages of RxUi are so tiny that you may not even see it at the first sight!
 
 ---
 
-Basically, RxUi is just two main functions:
+#####Basically, RxUi is just two main functions:
 
 1. `bind(Observable<T>): Subscription`
 2. `ui(Action1<T>): Func1<Observable<T>, Subscription>`
@@ -38,6 +37,8 @@ interface SignIn {
   Func1<Observable<Failure>, Subscription> signInFailure();
 }
 ```
+
+####Download
 
 #####RxUi
 
