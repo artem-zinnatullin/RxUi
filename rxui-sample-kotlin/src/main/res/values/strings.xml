@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RxUi Java Sample</string>
+    <string name="login_field_hint">Login</string>
+    <string name="password_field_hint">Password</string>
+    <string name="sign_in_button">Sign in</string>
+</resources>

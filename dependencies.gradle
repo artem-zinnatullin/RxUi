@@ -25,16 +25,18 @@ ext.versions = [
 
 ext.libraries = [
         rxUi            : project(':rxui'),
+        rxUiKotlin      : project(':rxui-kotlin'),
         rxUiTest        : project(':rxui-test'),
-        kotlinStd       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
 
         // Core dependencies.
         rxJava          : "io.reactivex:rxjava:$versions.rxJava",
         rxAndroid       : "io.reactivex:rxandroid:$versions.rxAndroid",
+        kotlinStd       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
 
         // Sample app dependencies.
         supportAppCompat: "com.android.support:appcompat-v7:$versions.supportLibs",
         rxBinding       : "com.jakewharton.rxbinding:rxbinding:$versions.rxBinding",
+        rxBindingKotlin : "com.jakewharton.rxbinding:rxbinding-kotlin:$versions.rxBinding",
         javaTuples      : "org.javatuples:javatuples:$versions.javaTuples",
 
         // Test dependencies.
