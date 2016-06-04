@@ -1,6 +1,5 @@
 package com.artemzin.rxui.sample.java;
 
-
 import android.support.annotation.NonNull;
 
 import com.artemzin.rxui.RxUi;
@@ -12,6 +11,7 @@ import org.javatuples.Triplet;
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscription;
+import rx.observables.ConnectableObservable;
 import rx.subscriptions.CompositeSubscription;
 
 // Since most of you use MVP, sample app uses MVP too.
@@ -37,9 +37,9 @@ class MainPresenter {
         Observable<String> password = view.password().share();
 
         // Boolean is valid/invalid flag.
-        Observable<Triplet<String, String, Boolean>> credentials = Observable
+        ConnectableObservable<Triplet<String, String, Boolean>> credentials = Observable
                 .combineLatest(login, password, (l, p) -> Triplet.with(l, p, !l.isEmpty() && !p.isEmpty()))
-                .share();
+                .publish();
 
         Observable<Void> signInEnable = credentials
                 .filter(creds -> creds.getValue2())
@@ -58,6 +58,8 @@ class MainPresenter {
                 .withLatestFrom(credentials, (click, creds) -> creds.removeFrom2()) // Leave only login and password.
                 .switchMap(loginAndPassword -> authService.signIn(loginAndPassword.getValue0(), loginAndPassword.getValue1()).subscribeOn(ioScheduler)) // "API request".
                 .share();
+
+        credentials.connect();
 
         Observable<Success> signInSuccess = signInResult
                 .filter(it -> it instanceof Success)
