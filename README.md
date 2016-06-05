@@ -33,10 +33,8 @@ interface SignIn {
   Observable<Void>   signInClicks();
   
   // Consumes.
-  Func1<Observable<Void>,    Subscription> signInEnable();
-  Func1<Observable<Void>,    Subscription> signInDisable(); 
-  Func1<Observable<Void>,    Subscription> signInSuccess();
-  Func1<Observable<Failure>, Subscription> signInFailure();
+  Func1<Observable<Boolean>,    Subscription>   signInEnable();
+  Func1<Observable<SignInResult>, Subscription> signInResult();
 }
 ```
 
