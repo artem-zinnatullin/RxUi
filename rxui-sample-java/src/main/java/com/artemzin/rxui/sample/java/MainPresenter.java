@@ -59,7 +59,7 @@ class MainPresenter {
                 .switchMap(loginAndPassword -> authService.signIn(loginAndPassword.getValue0(), loginAndPassword.getValue1()).subscribeOn(ioScheduler)) // "API request".
                 .share();
 
-        credentials.connect();
+        subscription.add(credentials.connect());
 
         Observable<Success> signInSuccess = signInResult
                 .filter(it -> it instanceof Success)
