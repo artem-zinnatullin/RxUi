@@ -19,7 +19,7 @@ class MainPresenter(private val authService: AuthService, private val ioSchedule
         // Boolean is valid/invalid flag.
         val credentials = Observable
                 .combineLatest(login, password, { login, password -> Triple(login, password, login.isNotEmpty() && password.isNotEmpty()) })
-                .share()
+                .publish()
 
         subscription += credentials
                 .filter { it.third }
@@ -37,6 +37,8 @@ class MainPresenter(private val authService: AuthService, private val ioSchedule
                 .withLatestFrom(credentials, { click, credentials -> credentials.first to credentials.second })
                 .switchMap { authService.signIn(login = it.first, password = it.second).subscribeOn(ioScheduler) }
                 .share()
+
+        subscription += credentials.connect();
 
         subscription += signInResult
                 .filter { it is Success }
