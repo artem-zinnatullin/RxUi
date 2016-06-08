@@ -45,7 +45,7 @@ interface SignIn {
 Only two functions at the moment: `RxUi.bind()` (use it in Presenters/ViewModels) and `RxUi.ui()` use it in `View` layer.
 
 ```groovy
-compile('com.artemzin.rxui:rxui:1.0.0@aar') { transitive = true }
+compile 'com.artemzin.rxui:rxui:1.0.1'
 ```
 &nbsp;
 #####RxUi Test
@@ -53,7 +53,7 @@ compile('com.artemzin.rxui:rxui:1.0.0@aar') { transitive = true }
 Only one function at the moment: `TestRxUi.testUi()`, basically same as `RxUi.ui()` except that it's synchronous and does not know about Main Thread.
 
 ```groovy
-testCompile('com.artemzin.rxui:rxui-test:1.0.0@aar') { transitive = true }
+testCompile 'com.artemzin.rxui:rxui-test:1.0.1'
 ```
 
 &nbsp;
@@ -62,7 +62,7 @@ testCompile('com.artemzin.rxui:rxui-test:1.0.0@aar') { transitive = true }
 Only one extension function at the moment: `Observable.bind()`, absolutely same as `RxUi.bind()` but easier to use in Kotlin.
 
 ```groovy
-compile('com.artemzin.rxui:rxui-kotlin:1.0.0@aar') { transitive = true }
+compile 'com.artemzin.rxui:rxui-kotlin:1.0.1'
 ```
 
 &nbsp;
