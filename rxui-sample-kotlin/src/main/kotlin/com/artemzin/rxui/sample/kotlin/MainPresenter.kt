@@ -38,7 +38,7 @@ class MainPresenter(private val authService: AuthService, private val ioSchedule
                 .switchMap { authService.signIn(login = it.first, password = it.second).subscribeOn(ioScheduler) }
                 .share()
 
-        subscription += credentials.connect();
+        subscription += credentials.connect()
 
         subscription += signInResult
                 .filter { it is Success }
