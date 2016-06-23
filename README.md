@@ -26,7 +26,7 @@ Check [Sample app written in Java](rxui-sample-java/src/main/java/com/artemzin/r
 And concept of `Observable <-> Observable` in the View layer when View only produces `Observable`s and consumes `Observable`s.
 
 ```java
-interface SignIn {
+interface SignInView {
   // Produces.
   Observable<String> login();
   Observable<String> password();
