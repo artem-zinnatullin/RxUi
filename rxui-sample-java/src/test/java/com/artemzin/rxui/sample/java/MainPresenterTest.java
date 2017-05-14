@@ -6,9 +6,10 @@ import com.artemzin.rxui.sample.java.AuthService.Success;
 import org.junit.Before;
 import org.junit.Test;
 
-import rx.Scheduler;
-import rx.schedulers.Schedulers;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class MainPresenterTest {
 
     TestAuthService authService = spy(new TestAuthService());
-    Scheduler ioScheduler = Schedulers.immediate();
+    Scheduler ioScheduler = Schedulers.trampoline();
     TestMainView view = new TestMainView();
 
     MainPresenter mainPresenter = new MainPresenter(authService, ioScheduler);
@@ -28,7 +29,7 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void shouldEnableSignInIfBothLoginAndPasswordAreNotEmpty() {
+    public void shouldEnableSignInIfBothLoginAndPasswordAreNotEmpty() throws Exception {
         // WHEN login is not empty
         view.login.onNext("a");
 
@@ -36,12 +37,12 @@ public class MainPresenterTest {
         view.password.onNext("1");
 
         // THEN sign in should be enabled
-        verify(view.signInEnable).call(null);
+        verify(view.signInEnable).accept(anyObject());
         verifyZeroInteractions(view.signInDisable);
     }
 
     @Test
-    public void shouldNotEnableSignInIfLoginIsNotEmptyButPasswordIsEmpty() {
+    public void shouldNotEnableSignInIfLoginIsNotEmptyButPasswordIsEmpty() throws Exception {
         // WHEN login is not empty
         view.login.onNext("a");
 
@@ -49,12 +50,12 @@ public class MainPresenterTest {
         view.password.onNext("");
 
         // THEN sign in should be disabled
-        verify(view.signInDisable).call(null);
+        verify(view.signInDisable).accept(anyObject());
         verifyZeroInteractions(view.signInEnable);
     }
 
     @Test
-    public void shouldNotEnableSignInIfLoginIsEmptyButPasswordIsNotEmpty() {
+    public void shouldNotEnableSignInIfLoginIsEmptyButPasswordIsNotEmpty() throws Exception {
         // WHEN login is empty
         view.login.onNext("");
 
@@ -62,7 +63,7 @@ public class MainPresenterTest {
         view.password.onNext("a");
 
         // THEN sign in should be disabled
-        verify(view.signInDisable).call(null);
+        verify(view.signInDisable).accept(anyObject());
         verifyZeroInteractions(view.signInEnable);
     }
 
@@ -77,7 +78,7 @@ public class MainPresenterTest {
         view.password.onNext("123456");
 
         // AND click on sign in happens
-        view.signInClicks.onNext(null);
+        view.signInClicks.onNext(new Object());
 
         // THEN should call signIn service with correct credentials (not intermediate ones)
         verify(authService).signIn("@artem_zin", "123456");
@@ -85,7 +86,7 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void shouldSendSuccessSignInResultToView() {
+    public void shouldSendSuccessSignInResultToView() throws Exception {
         // WHEN login is not empty
         view.login.onNext("abc");
 
@@ -93,19 +94,19 @@ public class MainPresenterTest {
         view.password.onNext("213");
 
         // AND click on sign in happens
-        view.signInClicks.onNext(null);
+        view.signInClicks.onNext(new Object());
 
         // AND signIn response arrives
         Success success = new Success();
         authService.signIn.onNext(success);
 
         // THEN should send signIn result to view
-        verify(view.signInSuccess).call(success);
+        verify(view.signInSuccess).accept(success);
         verifyZeroInteractions(view.signInFailure);
     }
 
     @Test
-    public void shouldSendFailureSignInResultToView() {
+    public void shouldSendFailureSignInResultToView() throws Exception {
         // WHEN login is not empty
         view.login.onNext("abc");
 
@@ -113,14 +114,14 @@ public class MainPresenterTest {
         view.password.onNext("213");
 
         // AND click on sign in happens
-        view.signInClicks.onNext(null);
+        view.signInClicks.onNext(new Object());
 
         // AND signIn response arrives
         Failure failure = new Failure();
         authService.signIn.onNext(failure);
 
         // THEN should send signIn result to view
-        verify(view.signInFailure).call(failure);
+        verify(view.signInFailure).accept(failure);
         verifyZeroInteractions(view.signInSuccess);
     }
 }

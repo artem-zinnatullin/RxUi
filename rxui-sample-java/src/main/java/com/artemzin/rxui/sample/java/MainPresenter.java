@@ -8,11 +8,11 @@ import com.artemzin.rxui.sample.java.AuthService.Success;
 
 import org.javatuples.Triplet;
 
-import rx.Observable;
-import rx.Scheduler;
-import rx.Subscription;
-import rx.observables.ConnectableObservable;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observables.ConnectableObservable;
 
 // Since most of you use MVP, sample app uses MVP too.
 class MainPresenter {
@@ -30,8 +30,8 @@ class MainPresenter {
     }
 
     @NonNull
-    Subscription bind(MainView view) {
-        final CompositeSubscription subscription = new CompositeSubscription();
+    Disposable bind(MainView view) {
+        final CompositeDisposable disposable = new CompositeDisposable();
 
         Observable<String> login = view.login().share();
         Observable<String> password = view.password().share();
@@ -41,25 +41,27 @@ class MainPresenter {
                 .combineLatest(login, password, (l, p) -> Triplet.with(l, p, !l.isEmpty() && !p.isEmpty()))
                 .publish();
 
-        Observable<Void> signInEnable = credentials
+        Observable<Object> signInEnable = credentials
                 .filter(creds -> creds.getValue2())
-                .map(enable -> null);
+                .map(enable -> new Object());
 
-        Observable<Void> signInDisable = credentials
+        Observable<Object> signInDisable = credentials
                 .filter(creds -> !creds.getValue2())
-                .map(disable -> null);
+                .map(disable -> new Object());
 
         // You can use static import for RxUi.bind()
-        subscription.add(RxUi.bind(signInEnable, view.singInEnable()));
-        subscription.add(RxUi.bind(signInDisable, view.singInDisable()));
+        disposable.add(RxUi.bind(signInEnable, view.singInEnable()));
+        disposable.add(RxUi.bind(signInDisable, view.singInDisable()));
 
         Observable<Object> signInResult = view
                 .signInClicks()
                 .withLatestFrom(credentials, (click, creds) -> creds.removeFrom2()) // Leave only login and password.
-                .switchMap(loginAndPassword -> authService.signIn(loginAndPassword.getValue0(), loginAndPassword.getValue1()).subscribeOn(ioScheduler)) // "API request".
+                .switchMap(loginAndPassword -> authService
+                        .signIn(loginAndPassword.getValue0(), loginAndPassword.getValue1())
+                        .subscribeOn(ioScheduler)) // "API request".
                 .share();
 
-        subscription.add(credentials.connect());
+        disposable.add(credentials.connect());
 
         Observable<Success> signInSuccess = signInResult
                 .filter(it -> it instanceof Success)
@@ -70,9 +72,9 @@ class MainPresenter {
                 .cast(Failure.class);
 
         // You can use static import for RxUi.bind()
-        subscription.add(RxUi.bind(signInSuccess, view.signInSuccess()));
-        subscription.add(RxUi.bind(signInFailure, view.signInFailure()));
+        disposable.add(RxUi.bind(signInSuccess, view.signInSuccess()));
+        disposable.add(RxUi.bind(signInFailure, view.signInFailure()));
 
-        return subscription;
+        return disposable;
     }
 }

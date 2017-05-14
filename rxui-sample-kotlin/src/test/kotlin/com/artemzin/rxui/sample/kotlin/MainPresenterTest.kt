@@ -4,15 +4,15 @@ package com.artemzin.rxui.sample.kotlin
 
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Failure
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Success
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*
-import rx.schedulers.Schedulers
 
 class MainPresenterTest {
 
     val authService = spy(TestAuthService())
-    val ioScheduler = Schedulers.immediate()
+    val ioScheduler = Schedulers.trampoline()
     val view = TestMainView()
 
     val presenter = MainPresenter(authService, ioScheduler)
@@ -23,7 +23,7 @@ class MainPresenterTest {
         presenter.bind(view)
 
         // THEN sign in should be disabled by default
-        verify(view.signInDisableAction).call(Unit)
+        verify(view.signInDisableAction).accept(Unit)
         verifyZeroInteractions(view.signInEnableAction)
 
         // Reset counter for tests.
@@ -39,7 +39,7 @@ class MainPresenterTest {
         view.password.onNext("1")
 
         // THEN sign in should be enabled
-        verify(view.signInEnableAction).call(Unit)
+        verify(view.signInEnableAction).accept(Unit)
         verifyZeroInteractions(view.signInDisableAction)
     }
 
@@ -52,7 +52,7 @@ class MainPresenterTest {
         view.password.onNext("")
 
         // THEN sign in should be disabled
-        verify(view.signInDisableAction).call(Unit)
+        verify(view.signInDisableAction).accept(Unit)
         verifyZeroInteractions(view.signInEnableAction)
     }
 
@@ -65,7 +65,7 @@ class MainPresenterTest {
         view.password.onNext("a")
 
         // THEN sign in should be disabled
-        verify(view.signInDisableAction).call(Unit)
+        verify(view.signInDisableAction).accept(Unit)
         verifyZeroInteractions(view.signInEnableAction)
     }
 
@@ -80,7 +80,7 @@ class MainPresenterTest {
         view.password.onNext("123456")
 
         // AND click on sign in happens
-        view.signInClicks.onNext(null)
+        view.signInClicks.onNext(Unit)
 
         // THEN should call signIn service with correct credentials (not intermediate ones)
         verify(authService).signIn("@artem_zin", "123456")
@@ -102,7 +102,7 @@ class MainPresenterTest {
         authService.signIn.onNext(Success)
 
         // THEN should send signIn result to view
-        verify(view.signInSuccessAction).call(Success)
+        verify(view.signInSuccessAction).accept(Success)
         verifyZeroInteractions(view.signInFailureAction)
     }
 
@@ -122,7 +122,7 @@ class MainPresenterTest {
         authService.signIn.onNext(failure)
 
         // THEN should send signIn result to view
-        verify(view.signInFailureAction).call(failure)
+        verify(view.signInFailureAction).accept(failure)
         verifyZeroInteractions(view.signInSuccessAction)
     }
 }

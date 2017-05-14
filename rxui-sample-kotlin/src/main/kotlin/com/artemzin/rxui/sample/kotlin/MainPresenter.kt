@@ -3,31 +3,36 @@ package com.artemzin.rxui.sample.kotlin
 import com.artemzin.rxui.kotlin.bind
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Failure
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Success
-import rx.Observable
-import rx.Scheduler
-import rx.Subscription
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.Scheduler
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 class MainPresenter(private val authService: AuthService, private val ioScheduler: Scheduler) {
 
-    fun bind(view: MainView): Subscription {
-        val subscription = CompositeSubscription()
+    fun bind(view: MainView): Disposable {
+        val disposable = CompositeDisposable()
 
         val login = view.login.share()
         val password = view.password.share()
 
+
         // Boolean is valid/invalid flag.
-        val credentials = Observable
-                .combineLatest(login, password, { login, password -> Triple(login, password, login.isNotEmpty() && password.isNotEmpty()) })
+        fun Pair<String, String>.valid(): Boolean {
+            val (login, password) = this
+            return login.isNotEmpty() && password.isNotEmpty()
+        }
+
+        val credentials = Observables
+                .combineLatest(login, password)
                 .publish()
 
-        subscription += credentials
-                .filter { it.third }
+        disposable += credentials
+                .filter { it.valid() }
                 .map { Unit }
                 .bind(view.signInEnable) // YES, that short, that simple and that readable!
 
-        subscription += credentials
-                .filter { !it.third }
+        disposable += credentials
+                .filter { !it.valid() }
                 .map { Unit }
                 .startWith(Unit) // Sign In should be disabled by default.
                 .bind(view.signInDisable)
@@ -38,21 +43,18 @@ class MainPresenter(private val authService: AuthService, private val ioSchedule
                 .switchMap { authService.signIn(login = it.first, password = it.second).subscribeOn(ioScheduler) }
                 .share()
 
-        subscription += credentials.connect()
+        disposable += credentials.connect()
 
-        subscription += signInResult
+        disposable += signInResult
                 .filter { it is Success }
                 .map { it as Success }
                 .bind(view.signInSuccess)
 
-        subscription += signInResult
+        disposable += signInResult
                 .filter { it is Failure }
                 .map { it as Failure }
                 .bind(view.signInFailure)
 
-        return subscription
+        return disposable
     }
-
-    // Yeah, if you've read my blog, I was sceptical about operators, but if you'll use them carefully they'll help keep code readable.
-    private operator fun CompositeSubscription.plusAssign(subscription: Subscription) = this.add(subscription)
 }

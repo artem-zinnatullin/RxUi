@@ -3,7 +3,7 @@ package com.artemzin.rxui.sample.java;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 interface AuthService {
 

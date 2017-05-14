@@ -11,12 +11,12 @@ import android.widget.Toast;
 import com.artemzin.rxui.RxUi;
 import com.artemzin.rxui.sample.java.AuthService.Failure;
 import com.artemzin.rxui.sample.java.AuthService.Success;
-import com.jakewharton.rxbinding.view.RxView;
-import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -35,7 +35,7 @@ class MainViewImpl implements MainView {
     }
 
     @Override
-    public Observable<Void> signInClicks() {
+    public Observable<Object> signInClicks() {
         return RxView.clicks(signInButton);
     }
 
@@ -50,24 +50,24 @@ class MainViewImpl implements MainView {
     }
 
     @Override
-    public Func1<Observable<Void>, Subscription> singInEnable() {
+    public Function<Observable<Object>, Disposable> singInEnable() {
         return RxUi.ui(enable -> signInButton.setEnabled(true));
     }
 
     @Override
-    public Func1<Observable<Void>, Subscription> singInDisable() {
+    public Function<Observable<Object>, Disposable> singInDisable() {
         return RxUi.ui(disable -> signInButton.setEnabled(false));
     }
 
     @Override
     @SuppressLint("ShowToast") // Because of Retrolambda Lint gives false positive on this check.
-    public Func1<Observable<Success>, Subscription> signInSuccess() {
+    public Function<Observable<Success>, Disposable> signInSuccess() {
         return RxUi.ui(result -> Toast.makeText(signInButton.getContext(), "Success", LENGTH_SHORT).show());
     }
 
     @SuppressLint("ShowToast") // Because of Retrolambda Lint gives false positive on this check.
     @Override
-    public Func1<Observable<Failure>, Subscription> signInFailure() {
+    public Function<Observable<Failure>, Disposable> signInFailure() {
         return RxUi.ui(failure -> Toast.makeText(signInButton.getContext(), "Failure", LENGTH_SHORT).show());
     }
 }

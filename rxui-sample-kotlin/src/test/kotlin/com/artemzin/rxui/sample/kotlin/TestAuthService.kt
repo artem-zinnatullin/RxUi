@@ -1,8 +1,7 @@
 package com.artemzin.rxui.sample.kotlin
 
 import com.artemzin.rxui.sample.kotlin.AuthService.Response
-import rx.subjects.PublishSubject
-
+import io.reactivex.subjects.PublishSubject
 
 open class TestAuthService : AuthService {
 

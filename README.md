@@ -1,11 +1,11 @@
 ### RxUi: Observable <-> Observable
 
-Minimal implementation of [the concept of talking to Android View layer in a Reactive way described here](http://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/).
+Minimal implementation of [the concept of talking to Android View layer in a Reactive way described here](https://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/).
 
 ##### RxUi [solves 3 main problems of communication](http://a.com) between Presenters/ViewModels/etc and View layer in Android applications:
 
 1. `Main Thread` should be part of View layer, Presenters/ViewModels/etc should not know about it.
-2. Action posted to `Main Thread` should be part of `Subscription` so you could `unsubscribe()` it.
+2. Action posted to `Main Thread` should be part of `Disposable` so you could `dispose()` it and prevent execution.
 3. Backpressure occurred on the View layer should be detected and handled on Presenter/ViewModel/etc layer above.
 
 ---
@@ -20,8 +20,8 @@ Check [Sample app written in Java](rxui-sample-java/src/main/java/com/artemzin/r
 
 ##### Basically, RxUi is just two main functions:
 
-1. `bind(Observable<T>): Subscription`
-2. `ui(Action1<T>): Func1<Observable<T>, Subscription>`
+1. `bind(Observable<T>): Disposable`
+2. `ui(Consumer<T>): Function<Observable<T>, Disposable>`
 
 And concept of `Observable <-> Observable` in the View layer when View only produces `Observable`s and consumes `Observable`s.
 
@@ -30,11 +30,11 @@ interface SignInView {
   // Produces.
   Observable<String> login();
   Observable<String> password();
-  Observable<Void>   signInClicks();
+  Observable<Object> signInClicks();
   
   // Consumes.
-  Func1<Observable<Boolean>,    Subscription>   signInEnable();
-  Func1<Observable<SignInResult>, Subscription> signInResult();
+  Function<Observable<Boolean>,      Disposable> signInEnable();
+  Function<Observable<SignInResult>, Disposable> signInResult();
 }
 ```
 
@@ -45,7 +45,7 @@ interface SignInView {
 Only two functions at the moment: `RxUi.bind()` (use it in Presenters/ViewModels) and `RxUi.ui()` use it in `View` layer.
 
 ```groovy
-compile 'com.artemzin.rxui:rxui:1.0.1'
+compile 'com.artemzin.rxui2:rxui:2.0.0'
 ```
 &nbsp;
 ##### RxUi Test
@@ -53,7 +53,7 @@ compile 'com.artemzin.rxui:rxui:1.0.1'
 Only one function at the moment: `TestRxUi.testUi()`, basically same as `RxUi.ui()` except that it's synchronous and does not know about Main Thread.
 
 ```groovy
-testCompile 'com.artemzin.rxui:rxui-test:1.0.1'
+testCompile 'com.artemzin.rxui2:rxui-test:2.0.0'
 ```
 
 &nbsp;
@@ -62,7 +62,7 @@ testCompile 'com.artemzin.rxui:rxui-test:1.0.1'
 Only one extension function at the moment: `Observable.bind()`, absolutely same as `RxUi.bind()` but easier to use in Kotlin.
 
 ```groovy
-compile 'com.artemzin.rxui:rxui-kotlin:1.0.1'
+compile 'com.artemzin.rxui2:rxui-kotlin:2.0.0'
 ```
 
 &nbsp;

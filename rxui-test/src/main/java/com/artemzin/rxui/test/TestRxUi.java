@@ -1,9 +1,9 @@
 package com.artemzin.rxui.test;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Test function(s) for RxUi.
@@ -17,12 +17,12 @@ public class TestRxUi {
      *
      * @param testUiAction test action, usually {@code Mockito.mock(Action1.class)} that will be bound to the {@link Observable}.
      * @param <T>          type of {@link Observable} emission.
-     * @return {@link Func1} that can be used to {@link com.artemzin.rxui.RxUi#bind(Observable, Func1)} {@link Observable} to some UI action.
+     * @return {@link Function} that can be used to {@link com.artemzin.rxui.RxUi#bind(Observable, Function)} {@link Observable} to some UI action.
      */
-    public static <T> Func1<Observable<T>, Subscription> testUi(final Action1<T> testUiAction) {
-        return new Func1<Observable<T>, Subscription>() {
+    public static <T> Function<Observable<T>, Disposable> testUi(final Consumer<T> testUiAction) {
+        return new Function<Observable<T>, Disposable>() {
             @Override
-            public Subscription call(Observable<T> observable) {
+            public Disposable apply(Observable<T> observable) {
                 return observable.subscribe(testUiAction);
             }
         };

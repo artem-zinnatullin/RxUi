@@ -2,9 +2,9 @@ package com.artemzin.rxui.sample.kotlin
 
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Failure
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Success
-import rx.Observable
-import rx.Subscription
-import rx.functions.Func1
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 
 // Observable <-> Observable.
 interface MainView {
@@ -14,8 +14,8 @@ interface MainView {
     val signInClicks: Observable<Unit>
 
     // Consumes.
-    val signInEnable: Func1<Observable<Unit>, Subscription>
-    val signInDisable: Func1<Observable<Unit>, Subscription>
-    val signInSuccess: Func1<Observable<Success>, Subscription>
-    val signInFailure: Func1<Observable<Failure>, Subscription>
+    val signInEnable: Function<Observable<Unit>, Disposable>
+    val signInDisable: Function<Observable<Unit>, Disposable>
+    val signInSuccess: Function<Observable<Success>, Disposable>
+    val signInFailure: Function<Observable<Failure>, Disposable>
 }

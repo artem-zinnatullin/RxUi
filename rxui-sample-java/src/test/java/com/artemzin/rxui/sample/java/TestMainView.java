@@ -1,10 +1,10 @@
 package com.artemzin.rxui.sample.java;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.PublishSubject;
 
 import static com.artemzin.rxui.test.TestRxUi.testUi;
 import static org.mockito.Mockito.mock;
@@ -13,12 +13,12 @@ class TestMainView implements MainView {
 
     final PublishSubject<String> login = PublishSubject.create();
     final PublishSubject<String> password = PublishSubject.create();
-    final PublishSubject<Void> signInClicks = PublishSubject.create();
+    final PublishSubject<Object> signInClicks = PublishSubject.create();
 
-    Action1<Void> signInEnable = mock(Action1.class);
-    Action1<Void> signInDisable = mock(Action1.class);
-    Action1<AuthService.Success> signInSuccess = mock(Action1.class);
-    Action1<AuthService.Failure> signInFailure = mock(Action1.class);
+    Consumer<Object> signInEnable = mock(Consumer.class);
+    Consumer<Object> signInDisable = mock(Consumer.class);
+    Consumer<AuthService.Success> signInSuccess = mock(Consumer.class);
+    Consumer<AuthService.Failure> signInFailure = mock(Consumer.class);
 
     @Override
     public Observable<String> login() {
@@ -31,27 +31,27 @@ class TestMainView implements MainView {
     }
 
     @Override
-    public Observable<Void> signInClicks() {
+    public Observable<Object> signInClicks() {
         return signInClicks;
     }
 
     @Override
-    public Func1<Observable<Void>, Subscription> singInEnable() {
+    public Function<Observable<Object>, Disposable> singInEnable() {
         return testUi(signInEnable); // No need for imitation of Main Thread scheduler!
     }
 
     @Override
-    public Func1<Observable<Void>, Subscription> singInDisable() {
+    public Function<Observable<Object>, Disposable> singInDisable() {
         return testUi(signInDisable);
     }
 
     @Override
-    public Func1<Observable<AuthService.Success>, Subscription> signInSuccess() {
+    public Function<Observable<AuthService.Success>, Disposable> signInSuccess() {
         return testUi(signInSuccess);
     }
 
     @Override
-    public Func1<Observable<AuthService.Failure>, Subscription> signInFailure() {
+    public Function<Observable<AuthService.Failure>, Disposable> signInFailure() {
         return testUi(signInFailure);
     }
 }
