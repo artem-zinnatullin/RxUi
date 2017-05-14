@@ -14,9 +14,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -43,9 +41,7 @@ public class RxUiTest {
         verify(uiFunc).apply(observable);
 
         // AND actual Disposable should be same as expected
-        assertSame(actualDisposable, expectedDisposable);
-
-        // TODO Robolectric does not have some JDK8 classes assertThat(actualDisposable).isSameAs(expectedDisposable);
+        assertThat(actualDisposable).isSameAs(expectedDisposable);
     }
 
     @Test
@@ -60,7 +56,7 @@ public class RxUiTest {
         ShadowLooper.pauseMainLooper();
 
         // AND bind Observable via binder func
-        binderFunc.apply(Observable.fromIterable(asList("a", "b", "c")));
+        binderFunc.apply(Observable.just("a", "b", "c"));
 
         // THEN action should not be called until main thread is paused
         verifyZeroInteractions(uiAction);
@@ -85,14 +81,14 @@ public class RxUiTest {
         Function<Observable<String>, Disposable> binderFunc = RxUi.ui(uiAction);
 
         // AND bind Observable via binder func
-        binderFunc.apply(Observable.fromIterable(asList("a", "b", "c")));
+        binderFunc.apply(Observable.just("a", "b", "c"));
 
         // THEN action should be called with all values of source Observable on Main Thread
         inOrder.verify(uiAction).accept("a");
         inOrder.verify(uiAction).accept("b");
         inOrder.verify(uiAction).accept("c");
         inOrder.verifyNoMoreInteractions();
-        assertTrue(wasCalledOnUiThread.get());
+        assertThat(wasCalledOnUiThread.get()).isTrue();
     }
 
     @Test
@@ -107,7 +103,7 @@ public class RxUiTest {
         ShadowLooper.pauseMainLooper();
 
         // AND bind Observable via binder func
-        Disposable disposable = binderFunc.apply(Observable.fromIterable(asList("a", "b", "c")));
+        Disposable disposable = binderFunc.apply(Observable.just("a", "b", "c"));
 
         // AND dispose Disposable
         disposable.dispose();

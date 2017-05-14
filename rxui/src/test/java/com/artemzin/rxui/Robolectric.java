@@ -11,9 +11,6 @@ import java.lang.reflect.Method;
 // Proudly copied from Quality Matters: https://raw.githubusercontent.com/artem-zinnatullin/qualitymatters/master/app/src/unitTests/java/com/artemzin/qualitymatters/QualityMattersRobolectricUnitTestRunner.java
 public class Robolectric extends RobolectricTestRunner {
 
-    // This value should be changed as soon as Robolectric will support newer api.
-    private static final int SDK_EMULATE_LEVEL = 21;
-
     public Robolectric(Class<?> klass) throws Exception {
         super(klass);
     }
@@ -22,7 +19,7 @@ public class Robolectric extends RobolectricTestRunner {
     public Config getConfig(Method method) {
         final Config defaultConfig = super.getConfig(method);
         return new Config.Implementation(
-                new int[]{SDK_EMULATE_LEVEL},
+                defaultConfig.sdk(),
                 defaultConfig.minSdk(),
                 defaultConfig.maxSdk(),
                 defaultConfig.manifest(),

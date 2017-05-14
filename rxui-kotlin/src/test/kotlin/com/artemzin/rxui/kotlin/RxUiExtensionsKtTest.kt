@@ -15,10 +15,10 @@ class RxUiExtensionsKtTest {
     @Test
     fun `bind should bind ui function to Observable`() {
         // WHEN we have an Observable
-        val observable = Observable.fromIterable(listOf("a", "b", "c"))
+        val observable = Observable.just("a", "b", "c")
 
         // AND we have a UI function
-        val uiFunc = mock(io.reactivex.functions.Function::class.java) as Function<Observable<String>, Disposable>
+        val uiFunc = mock(Function::class.java) as Function<Observable<String>, Disposable>
         val expectedDisposable = mock(Disposable::class.java)
         `when`(uiFunc.apply(observable)).then { expectedDisposable }
 

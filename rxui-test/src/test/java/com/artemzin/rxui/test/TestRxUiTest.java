@@ -8,7 +8,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-import static java.util.Arrays.asList;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -24,7 +23,7 @@ public class TestRxUiTest {
         Function<Observable<String>, Disposable> binderFunc = TestRxUi.testUi(testUiAction);
 
         // AND bind Observable via test binder func
-        binderFunc.apply(Observable.fromIterable(asList("a", "b", "c")));
+        binderFunc.apply(Observable.just("a", "b", "c"));
 
         // THEN should call action with all values in required order
         inOrder.verify(testUiAction).accept("a");
