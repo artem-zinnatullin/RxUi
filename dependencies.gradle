@@ -1,7 +1,7 @@
 ext.versions = [
         targetJava : '1.6',
 
-        compileSdk : 25,
+        compileSdk : 23,
         minSdk     : 14,
         buildTools : '25.0.3',
 
