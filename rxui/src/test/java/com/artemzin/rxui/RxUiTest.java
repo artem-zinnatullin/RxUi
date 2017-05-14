@@ -15,7 +15,8 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -42,7 +43,9 @@ public class RxUiTest {
         verify(uiFunc).call(observable);
 
         // AND actual subscription should be same as expected
-        assertThat(actualSubscription).isSameAs(expectedSubscription);
+        assertSame(actualSubscription, expectedSubscription);
+
+        // Robolectric does not have some JDK8 classes assertThat(actualSubscription).isSameAs(expectedSubscription);
     }
 
     @Test
@@ -89,7 +92,7 @@ public class RxUiTest {
         inOrder.verify(uiAction).call("b");
         inOrder.verify(uiAction).call("c");
         inOrder.verifyNoMoreInteractions();
-        assertThat(wasCalledOnUiThread.get()).isTrue();
+        assertTrue(wasCalledOnUiThread.get());
     }
 
     @Test
