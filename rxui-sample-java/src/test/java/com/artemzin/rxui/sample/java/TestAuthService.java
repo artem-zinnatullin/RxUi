@@ -2,8 +2,8 @@ package com.artemzin.rxui.sample.java;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 class TestAuthService implements AuthService {
 

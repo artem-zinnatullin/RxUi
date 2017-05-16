@@ -2,12 +2,12 @@
 
 package com.artemzin.rxui.kotlin
 
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito.*
-import rx.Observable
-import rx.Subscription
-import rx.functions.Func1
 
 class RxUiExtensionsKtTest {
 
@@ -15,20 +15,20 @@ class RxUiExtensionsKtTest {
     @Test
     fun `bind should bind ui function to Observable`() {
         // WHEN we have an Observable
-        val observable = Observable.from(listOf("a", "b", "c"))
+        val observable = Observable.just("a", "b", "c")
 
         // AND we have a UI function
-        val uiFunc = mock(Func1::class.java) as Func1<Observable<String>, Subscription>
-        val expectedSubscription = mock(Subscription::class.java)
-        `when`(uiFunc.call(observable)).then { expectedSubscription }
+        val uiFunc = mock(Function::class.java) as Function<Observable<String>, Disposable>
+        val expectedDisposable = mock(Disposable::class.java)
+        `when`(uiFunc.apply(observable)).then { expectedDisposable }
 
         // AND we bind UI function to Observable
-        val actualSubscription = observable.bind(uiFunc)
+        val actualDisposable = observable.bind(uiFunc)
 
         // THEN UI function should be called with Observable
-        verify(uiFunc).call(observable)
+        verify(uiFunc).apply(observable)
 
-        // THEN actual subscription should be same as expected
-        assertThat(actualSubscription).isSameAs(expectedSubscription)
+        // THEN actual Disposable should be same as expected
+        assertThat(actualDisposable).isSameAs(expectedDisposable)
     }
 }

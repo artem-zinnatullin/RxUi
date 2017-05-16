@@ -8,8 +8,8 @@ import android.widget.Toast.LENGTH_SHORT
 import com.artemzin.rxui.RxUi.ui
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Failure
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Success
-import com.jakewharton.rxbinding.view.clicks
-import com.jakewharton.rxbinding.widget.textChanges
+import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.widget.textChanges
 
 class MainViewImpl(private val content: ViewGroup) : MainView {
 

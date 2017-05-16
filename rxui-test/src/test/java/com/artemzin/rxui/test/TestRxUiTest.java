@@ -3,33 +3,32 @@ package com.artemzin.rxui.test;
 import org.junit.Test;
 import org.mockito.InOrder;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
-import static java.util.Arrays.asList;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
 public class TestRxUiTest {
 
     @Test
-    public void testUiShouldCallActionSynchronously() {
+    public void testUiShouldCallActionSynchronously() throws Exception {
         // WHEN have some test UI action
-        Action1<String> testUiAction = mock(Action1.class);
+        Consumer<String> testUiAction = mock(Consumer.class);
         InOrder inOrder = inOrder(testUiAction);
 
         // AND produce binder func
-        Func1<Observable<String>, Subscription> binderFunc = TestRxUi.testUi(testUiAction);
+        Function<Observable<String>, Disposable> binderFunc = TestRxUi.testUi(testUiAction);
 
         // AND bind Observable via test binder func
-        binderFunc.call(Observable.from(asList("a", "b", "c")));
+        binderFunc.apply(Observable.just("a", "b", "c"));
 
         // THEN should call action with all values in required order
-        inOrder.verify(testUiAction).call("a");
-        inOrder.verify(testUiAction).call("b");
-        inOrder.verify(testUiAction).call("c");
+        inOrder.verify(testUiAction).accept("a");
+        inOrder.verify(testUiAction).accept("b");
+        inOrder.verify(testUiAction).accept("c");
         inOrder.verifyNoMoreInteractions();
     }
 }

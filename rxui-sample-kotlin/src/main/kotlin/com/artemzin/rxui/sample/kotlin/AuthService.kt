@@ -2,7 +2,7 @@ package com.artemzin.rxui.sample.kotlin
 
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Failure
 import com.artemzin.rxui.sample.kotlin.AuthService.Response.Success
-import rx.Observable
+import io.reactivex.Observable
 
 interface AuthService {
 

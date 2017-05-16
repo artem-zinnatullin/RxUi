@@ -9,13 +9,12 @@ import org.robolectric.shadows.ShadowLooper;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -27,50 +26,50 @@ import static org.mockito.Mockito.when;
 public class RxUiTest {
 
     @Test
-    public void bind() {
+    public void bind() throws Exception {
         // WHEN have Observable and UI function
         Observable<String> observable = Observable.just("value");
-        Func1<Observable<String>, Subscription> uiFunc = mock(Func1.class);
+        Function<Observable<String>, Disposable> uiFunc = mock(Function.class);
 
-        Subscription expectedSubscription = mock(Subscription.class);
-        when(uiFunc.call(observable)).thenReturn(expectedSubscription);
+        Disposable expectedDisposable = mock(Disposable.class);
+        when(uiFunc.apply(observable)).thenReturn(expectedDisposable);
 
         // AND bind Observable to UI function
-        Subscription actualSubscription = RxUi.bind(observable, uiFunc);
+        Disposable actualDisposable = RxUi.bind(observable, uiFunc);
 
         // THEN UI function should be called with passed Observable
-        verify(uiFunc).call(observable);
+        verify(uiFunc).apply(observable);
 
-        // AND actual subscription should be same as expected
-        assertThat(actualSubscription).isSameAs(expectedSubscription);
+        // AND actual Disposable should be same as expected
+        assertThat(actualDisposable).isSameAs(expectedDisposable);
     }
 
     @Test
-    public void uiShouldNotCallActionUntilMainThreadIsPaused() {
+    public void uiShouldNotCallActionUntilMainThreadIsPaused() throws Exception {
         // WHEN have UI action
-        Action1<String> uiAction = mock(Action1.class);
+        Consumer<String> uiAction = mock(Consumer.class);
 
         // AND produce binder func
-        Func1<Observable<String>, Subscription> binderFunc = RxUi.ui(uiAction);
+        Function<Observable<String>, Disposable> binderFunc = RxUi.ui(uiAction);
 
         // AND main thread is paused
         ShadowLooper.pauseMainLooper();
 
         // AND bind Observable via binder func
-        binderFunc.call(Observable.from(asList("a", "b", "c")));
+        binderFunc.apply(Observable.just("a", "b", "c"));
 
         // THEN action should not be called until main thread is paused
         verifyZeroInteractions(uiAction);
     }
 
     @Test
-    public void uiShouldCallAction() {
+    public void uiShouldCallAction() throws Exception {
         final AtomicBoolean wasCalledOnUiThread = new AtomicBoolean(true);
 
         // WHEN have UI action
-        Action1<String> uiAction = spy(new Action1<String>() {
+        Consumer<String> uiAction = spy(new Consumer<String>() {
             @Override
-            public void call(String s) {
+            public void accept(String s) {
                 if (!wasCalledOnUiThread.compareAndSet(true, Looper.getMainLooper() == Looper.myLooper())) {
                     throw new IllegalStateException("Not on Main Thread!");
                 }
@@ -79,35 +78,35 @@ public class RxUiTest {
         InOrder inOrder = inOrder(uiAction);
 
         // AND produce binder func
-        Func1<Observable<String>, Subscription> binderFunc = RxUi.ui(uiAction);
+        Function<Observable<String>, Disposable> binderFunc = RxUi.ui(uiAction);
 
         // AND bind Observable via binder func
-        binderFunc.call(Observable.from(asList("a", "b", "c")));
+        binderFunc.apply(Observable.just("a", "b", "c"));
 
         // THEN action should be called with all values of source Observable on Main Thread
-        inOrder.verify(uiAction).call("a");
-        inOrder.verify(uiAction).call("b");
-        inOrder.verify(uiAction).call("c");
+        inOrder.verify(uiAction).accept("a");
+        inOrder.verify(uiAction).accept("b");
+        inOrder.verify(uiAction).accept("c");
         inOrder.verifyNoMoreInteractions();
         assertThat(wasCalledOnUiThread.get()).isTrue();
     }
 
     @Test
-    public void uiShouldPreventCallsToActionIfUnsubscribedBeforeExecution() {
+    public void uiShouldPreventCallsToActionIfUnsubscribedBeforeExecution() throws Exception {
         // WHEN have UI action
-        Action1<String> uiAction = mock(Action1.class);
+        Consumer<String> uiAction = mock(Consumer.class);
 
         // AND produce binder func
-        Func1<Observable<String>, Subscription> binderFunc = RxUi.ui(uiAction);
+        Function<Observable<String>, Disposable> binderFunc = RxUi.ui(uiAction);
 
         // AND pause Main Thread
         ShadowLooper.pauseMainLooper();
 
         // AND bind Observable via binder func
-        Subscription subscription = binderFunc.call(Observable.from(asList("a", "b", "c")));
+        Disposable disposable = binderFunc.apply(Observable.just("a", "b", "c"));
 
-        // AND unsubscribe from subscription
-        subscription.unsubscribe();
+        // AND dispose Disposable
+        disposable.dispose();
 
         // AND resume Main Thread
         ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
