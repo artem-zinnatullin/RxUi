@@ -2,7 +2,7 @@
 
 Minimal implementation of [the concept of talking to Android View layer in a Reactive way described here](https://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/).
 
-##### RxUi [solves 3 main problems of communication](http://a.com) between Presenters/ViewModels/etc and View layer in Android applications:
+##### RxUi [solves 3 main problems of communication](https://artemzin.com/blog/rxui-talking-to-android-view-layer-in-a-reactive-way/) between Presenters/ViewModels/etc and View layer in Android applications:
 
 1. `Main Thread` should be part of View layer, Presenters/ViewModels/etc should not know about it.
 2. Action posted to `Main Thread` should be part of `Disposable` so you could `dispose()` it and prevent execution.
