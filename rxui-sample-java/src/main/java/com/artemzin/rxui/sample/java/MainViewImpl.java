@@ -50,12 +50,12 @@ class MainViewImpl implements MainView {
     }
 
     @Override
-    public Function<Observable<Object>, Disposable> singInEnable() {
+    public Function<Observable<Object>, Disposable> signInEnable() {
         return RxUi.ui(enable -> signInButton.setEnabled(true));
     }
 
     @Override
-    public Function<Observable<Object>, Disposable> singInDisable() {
+    public Function<Observable<Object>, Disposable> signInDisable() {
         return RxUi.ui(disable -> signInButton.setEnabled(false));
     }
 

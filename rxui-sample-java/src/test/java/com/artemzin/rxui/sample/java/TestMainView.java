@@ -36,12 +36,12 @@ class TestMainView implements MainView {
     }
 
     @Override
-    public Function<Observable<Object>, Disposable> singInEnable() {
+    public Function<Observable<Object>, Disposable> signInEnable() {
         return testUi(signInEnable); // No need for imitation of Main Thread scheduler!
     }
 
     @Override
-    public Function<Observable<Object>, Disposable> singInDisable() {
+    public Function<Observable<Object>, Disposable> signInDisable() {
         return testUi(signInDisable);
     }
 
