@@ -50,8 +50,8 @@ class MainPresenter {
                 .map(disable -> new Object());
 
         // You can use static import for RxUi.bind()
-        disposable.add(RxUi.bind(signInEnable, view.singInEnable()));
-        disposable.add(RxUi.bind(signInDisable, view.singInDisable()));
+        disposable.add(RxUi.bind(signInEnable, view.signInEnable()));
+        disposable.add(RxUi.bind(signInDisable, view.signInDisable()));
 
         Observable<Object> signInResult = view
                 .signInClicks()

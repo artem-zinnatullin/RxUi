@@ -13,8 +13,8 @@ interface MainView {
     Observable<Object> signInClicks();
 
     // Consumes.
-    Function<Observable<Object>, Disposable> singInEnable();
-    Function<Observable<Object>, Disposable> singInDisable();
+    Function<Observable<Object>, Disposable> signInEnable();
+    Function<Observable<Object>, Disposable> signInDisable();
     Function<Observable<AuthService.Success>, Disposable> signInSuccess();
     Function<Observable<AuthService.Failure>, Disposable> signInFailure();
 }
