@@ -5,4 +5,4 @@ set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR=$DIR/..
 
-"$PROJECT_DIR"/gradlew -s clean build uploadArchives --info --no-daemon -p "$PROJECT_DIR"
+"$PROJECT_DIR"/gradlew -s clean build uploadArchives --info --daemon -p "$PROJECT_DIR"
